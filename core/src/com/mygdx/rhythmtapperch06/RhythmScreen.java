@@ -94,6 +94,8 @@ public class RhythmScreen extends BaseScreen {
                     scoreLabel.setText("Score: " + score + "\n" + "Max: " + maxScore);
                     timeLabel.setText("Time: " + 0 + "\n" + "End: " + (int)songDuration);
 
+                    message.displayCountdown();
+
                     return true;
                 }
         );
@@ -154,9 +156,15 @@ public class RhythmScreen extends BaseScreen {
                     message.setAnimation(message.miss);
                     message.pulseFade();
                     fallingList.remove(fb);
-                    fb.remove(); // remove from stage immediately
+                    fb.setSpeed(0);
+                    fb.flashOut();
                 }
             }
+        }
+
+        if (songData.isFinished() && !gameMusic.isPlaying()) {
+            message.displayCongratulations();
+            songData = null;
         }
     }
 
@@ -169,6 +177,7 @@ public class RhythmScreen extends BaseScreen {
         if (keyList.contains(keyString)) {
             int i = keyList.indexOf(keyString);
             TargetBox tb = targetList.get(i);
+            tb.pulse();
             ArrayList<FallingBox> fallingList = fallingLists.get(i);
 
             if (fallingList.size() == 0) {
@@ -198,7 +207,8 @@ public class RhythmScreen extends BaseScreen {
                 scoreLabel.setText("Score: " + score + "\n" + "Max: " + maxScore);
 
                 fallingList.remove(fb);
-                fb.remove();
+                fb.setSpeed(0);
+                fb.flashOut();
             }
         }
 
